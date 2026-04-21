@@ -120,7 +120,7 @@ export const experiences = [
     role: "Founder & Product Engineer",
     company: "The Agile Labs",
     location: "Beirut, Lebanon",
-    dates: "10/2023–present",
+    dates: "Oct 2023 – Present",
     symbol: "LR",
     accent: "amber",
     bullets: [
@@ -133,7 +133,7 @@ export const experiences = [
     role: "Full Stack Intern",
     company: "I-Stay",
     location: "Remote",
-    dates: "05/2024–08/2024",
+    dates: "May 2024 – Aug 2024",
     symbol: "IS",
     accent: "blue",
     bullets: [
@@ -146,7 +146,7 @@ export const experiences = [
     role: "Full Stack Developer",
     company: "Codi-Tech",
     location: "Lebanon",
-    dates: "11/2022–06/2023",
+    dates: "Nov 2022 – Jun 2023",
     symbol: "CT",
     accent: "amber",
     bullets: [
@@ -159,7 +159,7 @@ export const experiences = [
     role: "Coding Mentor",
     company: "CodeBrave",
     location: "Lebanon",
-    dates: "07/2023–present",
+    dates: "Jul 2023 – Present",
     symbol: "CB",
     accent: "green",
     bullets: [
@@ -174,37 +174,81 @@ export const skillGroups = [
   {
     category: "Languages",
     short: "Lang",
-    skills: ["JavaScript ES6+", "TypeScript", "Python", "PHP"],
+    description: "Core languages across every project. TypeScript throughout TRX; Python for data processing and scripting.",
+    skills: [
+      { name: "JavaScript ES6+", primary: true },
+      { name: "TypeScript", primary: true },
+      { name: "Python", primary: false },
+      { name: "PHP", primary: false },
+    ],
   },
   {
     category: "Frontend",
     short: "FE",
-    skills: ["React", "Next.js", "Redux", "Tailwind CSS", "PWA", "IndexedDB"],
+    description: "Built TRX's full frontend in React + TypeScript — PWA shell, IndexedDB offline storage, and animated UI.",
+    skills: [
+      { name: "React", primary: true },
+      { name: "TypeScript", primary: true },
+      { name: "Tailwind CSS", primary: true },
+      { name: "Next.js", primary: true },
+      { name: "Redux", primary: false },
+      { name: "PWA", primary: false },
+      { name: "IndexedDB", primary: false },
+    ],
   },
   {
     category: "Backend",
     short: "BE",
-    skills: ["Node.js", "Express.js", "Spring Boot", "Laravel", "REST APIs"],
+    description: "Designed and built TRX's API layer, sync architecture, and all five of my production backends.",
+    skills: [
+      { name: "Node.js", primary: true },
+      { name: "Express.js", primary: true },
+      { name: "REST APIs", primary: true },
+      { name: "Spring Boot", primary: false },
+      { name: "Laravel", primary: false },
+    ],
   },
   {
     category: "Databases",
     short: "DB",
-    skills: ["MongoDB", "MySQL"],
+    description: "MongoDB powers TRX with aggregation pipelines for real-time financial totals. MySQL used at Codi-Tech.",
+    skills: [
+      { name: "MongoDB", primary: true },
+      { name: "MySQL", primary: false },
+    ],
   },
   {
     category: "Testing",
     short: "QA",
-    skills: ["Playwright", "Jest"],
+    description: "Playwright covers TRX's full financial and sync flows end-to-end. Jest for isolated business logic.",
+    skills: [
+      { name: "Playwright", primary: true },
+      { name: "Jest", primary: false },
+    ],
   },
   {
     category: "Tooling",
     short: "Tool",
-    skills: ["Git", "GitHub", "GitLab", "Postman", "Swagger", "Figma"],
+    description: "Design-to-code in Figma, API development in Postman, version control across GitHub and GitLab.",
+    skills: [
+      { name: "Git", primary: true },
+      { name: "Figma", primary: true },
+      { name: "Postman", primary: true },
+      { name: "GitHub", primary: false },
+      { name: "GitLab", primary: false },
+      { name: "Swagger", primary: false },
+    ],
   },
   {
     category: "Concepts",
     short: "Ops",
-    skills: ["OOP", "SOLID", "Agile", "Offline-first architecture"],
+    description: "Offline-first architecture is the core of TRX. Agile delivery across Codi-Tech and I-Stay.",
+    skills: [
+      { name: "Offline-first", primary: true },
+      { name: "Agile", primary: true },
+      { name: "OOP", primary: true },
+      { name: "SOLID", primary: false },
+    ],
   },
 ] as const;
 

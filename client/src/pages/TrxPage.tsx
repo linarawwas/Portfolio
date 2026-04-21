@@ -173,6 +173,12 @@ function ArchitectureDiagram() {
 }
 
 export default function TrxPage() {
+  useEffect(() => {
+    const prev = document.title;
+    document.title = "TRX Case Study — Lina Rawas";
+    return () => { document.title = prev; };
+  }, []);
+
   return (
     <PageShell>
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.1),transparent_28%),radial-gradient(circle_at_80%_18%,rgba(245,158,11,0.08),transparent_18%)]" />
@@ -255,11 +261,10 @@ export default function TrxPage() {
                       : "border-amber-400/22 bg-amber-400/[0.06]"
                   }`}
                 >
-                  <div className="mb-4 flex items-center justify-between">
-                    <div className={`size-11 rounded-2xl border ${item.severity === "danger" ? "border-red-300/25 bg-red-400/10" : "border-amber-300/25 bg-amber-400/10"}`} />
-                    <div className={`rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] ${item.severity === "danger" ? "bg-red-400/10 text-red-200" : "bg-amber-400/10 text-amber-200"}`}>
+                  <div className="mb-4">
+                    <span className={`rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] ${item.severity === "danger" ? "bg-red-400/10 text-red-300" : "bg-amber-400/10 text-amber-300"}`}>
                       {item.severity}
-                    </div>
+                    </span>
                   </div>
                   <h3 className="font-display text-3xl leading-none text-white">{item.title}</h3>
                   <p className="mt-4 text-sm leading-7 text-slate-300">{item.description}</p>

@@ -17,6 +17,7 @@ import {
 } from "framer-motion";
 import {
   ArrowRight,
+  ChevronDown,
   ExternalLink,
   Github,
   Lock,
@@ -33,6 +34,7 @@ import {
   featuredProject,
   heroSubtitles,
   navLinks,
+  siteMeta,
   skillGroups,
   supportingProjects,
 } from "@/lib/portfolioData";
@@ -711,8 +713,9 @@ function ProjectAction({ project }: { project: (typeof supportingProjects)[numbe
           </a>
         </Button>
       ) : (
-        <div className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-500">
-          Live demo · deployment in progress
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-500">
+          <Lock className="size-3.5" />
+          Not public
         </div>
       )}
     </div>
@@ -854,29 +857,54 @@ function DesktopTimeline() {
 
   return (
     <div ref={sectionRef} className="relative hidden h-[260vh] lg:block">
-      <div className="sticky top-24 flex h-[calc(100vh-7rem)] items-center overflow-hidden">
-        <motion.div style={{ x: translateX }} className="flex gap-6 pl-1 pr-[28vw]">
-          {experiences.map((item) => (
-            <article key={item.role} className="w-[25rem] shrink-0 rounded-[1.8rem] border border-white/10 bg-white/[0.03] p-7 shadow-[0_28px_70px_rgba(0,0,0,0.3)]">
-              <div className="mb-8 flex items-center justify-between">
-                <div className={`flex size-14 items-center justify-center rounded-2xl border text-sm font-semibold tracking-[0.2em] ${item.accent === "blue" ? "border-indigo-400/30 bg-indigo-400/12 text-indigo-200" : item.accent === "green" ? "border-emerald-400/30 bg-emerald-400/12 text-emerald-200" : "border-amber-400/30 bg-amber-400/12 text-amber-200"}`}>
-                  {item.symbol}
-                </div>
-                <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-amber-300">{item.dates}</div>
-              </div>
-              <h3 className="font-display text-[1.75rem] leading-none text-white">{item.role}</h3>
-              <p className="mt-3 text-sm uppercase tracking-[0.2em] text-slate-500">{item.company} · {item.location}</p>
-              <div className="mt-7 space-y-4 text-sm leading-7 text-slate-300">
-                {item.bullets.map((bullet) => (
-                  <div key={bullet} className="flex gap-3">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-amber-400" />
-                    <p>{bullet}</p>
+      <div className="sticky top-24 h-[calc(100vh-7rem)] overflow-hidden">
+        {/* Scroll progress bar */}
+        <div className="relative h-px w-full bg-white/8">
+          <motion.div
+            className="absolute inset-y-0 left-0 h-px bg-amber-400/70 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+            style={{ scaleX: scrollYProgress, transformOrigin: "left" }}
+          />
+        </div>
+        <div className="flex h-full items-center">
+          <motion.div style={{ x: translateX }} className="flex gap-6 pl-1 pr-[28vw]">
+            {experiences.map((item, index) => (
+              <article
+                key={item.role}
+                className={`w-[25rem] shrink-0 rounded-[1.8rem] border p-7 shadow-[0_28px_70px_rgba(0,0,0,0.3)] ${
+                  index === 0
+                    ? "border-amber-400/25 bg-amber-400/[0.03] shadow-[0_28px_70px_rgba(0,0,0,0.3),0_0_60px_rgba(245,158,11,0.08)]"
+                    : "border-white/10 bg-white/[0.03]"
+                }`}
+              >
+                <div className="mb-8 flex items-center justify-between">
+                  <div className={`flex size-14 items-center justify-center rounded-2xl border font-mono text-base font-semibold tracking-[0.18em] ${item.accent === "blue" ? "border-indigo-400/30 bg-indigo-400/12 text-indigo-200" : item.accent === "green" ? "border-emerald-400/30 bg-emerald-400/12 text-emerald-200" : "border-amber-400/30 bg-amber-400/12 text-amber-200"}`}>
+                    {String(index + 1).padStart(2, "0")}
                   </div>
-                ))}
-              </div>
-            </article>
-          ))}
-        </motion.div>
+                  <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-amber-300">{item.dates}</div>
+                </div>
+                {index === 0 && (
+                  <div className="mb-5 flex flex-wrap gap-2">
+                    {["3k+ txn/mo", "40% less overhead", "Sole engineer"].map((m) => (
+                      <span key={m} className="rounded-full border border-amber-400/20 bg-amber-400/8 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-amber-200">
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <h3 className="font-display text-[1.75rem] leading-none text-white">{item.role}</h3>
+                <p className="mt-3 text-sm uppercase tracking-[0.2em] text-slate-500">{item.company} · {item.location}</p>
+                <div className="mt-7 space-y-4 text-sm leading-7 text-slate-300">
+                  {item.bullets.map((bullet) => (
+                    <div key={bullet} className="flex gap-3">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
+                      <p>{bullet}</p>
+                    </div>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </div>
   );
@@ -890,12 +918,24 @@ function MobileTimeline() {
       {experiences.map((item, index) => {
         const open = openIndex === index;
         return (
-          <article key={item.role} className="relative rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5 pl-8">
-            <div className="absolute left-4 top-5 h-[calc(100%-2.5rem)] w-px bg-amber-400/45" />
+          <article
+            key={item.role}
+            className={`relative rounded-[1.5rem] border p-5 pl-9 transition-colors duration-300 ${
+              index === 0
+                ? open ? "border-amber-400/30 bg-amber-400/[0.03]" : "border-amber-400/15 bg-white/[0.02]"
+                : "border-white/10 bg-white/[0.03]"
+            }`}
+          >
+            <div className={`absolute left-4 top-5 h-[calc(100%-2.5rem)] w-0.5 rounded-full transition-colors duration-300 ${open ? "bg-amber-400/70" : "bg-amber-400/25"}`} />
             <button className="w-full text-left" onClick={() => setOpenIndex(open ? null : index)}>
-              <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-amber-300">{item.dates}</div>
-              <h3 className="mt-3 font-display text-2xl text-white">{item.role}</h3>
-              <p className="mt-2 text-sm uppercase tracking-[0.18em] text-slate-500">{item.company} · {item.location}</p>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-amber-300">{item.dates}</div>
+                  <h3 className="mt-2 font-display text-2xl text-white">{item.role}</h3>
+                  <p className="mt-1.5 text-sm uppercase tracking-[0.18em] text-slate-500">{item.company} · {item.location}</p>
+                </div>
+                <ChevronDown className={`mt-1 size-5 shrink-0 text-slate-500 transition-all duration-300 ${open ? "rotate-180 text-amber-300" : ""}`} />
+              </div>
             </button>
             <AnimatePresence>
               {open ? (
@@ -903,7 +943,7 @@ function MobileTimeline() {
                   <div className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
                     {item.bullets.map((bullet) => (
                       <div key={bullet} className="flex gap-3">
-                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-amber-400" />
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
                         <p>{bullet}</p>
                       </div>
                     ))}
@@ -925,7 +965,7 @@ function ExperienceSection() {
         <SectionHeading
           eyebrow="Experience"
           title="Shipped across agency, startup, and teaching contexts."
-          description="This section translates vertical scrolling into an operational timeline on larger screens, then collapses into direct mobile cards without losing the narrative arc."
+          description="From intern to founder — four roles that built production systems, taught 200+ students, and shipped to paying clients."
         />
       </div>
       <DesktopTimeline />
@@ -939,6 +979,19 @@ function ExperienceSection() {
 function SkillsSection() {
   const [active, setActive] = useState<(typeof skillGroups)[number]["category"]>(skillGroups[0].category);
   const activeGroup = useMemo(() => skillGroups.find((group) => group.category === active) ?? skillGroups[0], [active]);
+  const [openMobileCategories, setOpenMobileCategories] = useState<Set<string>>(new Set());
+
+  const toggleMobileCategory = (category: string) => {
+    setOpenMobileCategories((prev) => {
+      const next = new Set(prev);
+      if (next.has(category)) {
+        next.delete(category);
+      } else {
+        next.add(category);
+      }
+      return next;
+    });
+  };
 
   return (
     <section id="skills" className="relative py-28 md:py-36">
@@ -946,17 +999,20 @@ function SkillsSection() {
         <SectionHeading
           eyebrow="Skills"
           title="A full stack profile organized like a system map."
-          description="On larger screens the categories orbit a central operating core. On mobile they collapse into expandable groups while keeping the same vocabulary and hierarchy."
+          description="Everything from schema design to Playwright tests, owned end-to-end. Hover or tap a category to see the tools behind the work."
         />
 
+        {/* Desktop orbit */}
         <div className="hidden lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-10">
           <div className="relative mx-auto h-[38rem] w-full max-w-[38rem]">
+            {/* Center core */}
             <div className="absolute left-1/2 top-1/2 flex h-40 w-40 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-amber-400/25 bg-amber-400/8 text-center shadow-[0_0_50px_rgba(245,158,11,0.15)]">
               <div>
                 <div className="font-mono text-[11px] uppercase tracking-[0.26em] text-amber-300">Core</div>
                 <div className="mt-2 font-display text-4xl text-white">Full Stack</div>
               </div>
             </div>
+            {/* Orbit nodes */}
             {skillGroups.map((group, index) => {
               const angle = (Math.PI * 2 * index) / skillGroups.length - Math.PI / 2;
               const radius = 220;
@@ -972,64 +1028,122 @@ function SkillsSection() {
                   className="absolute left-1/2 top-1/2"
                   style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}
                 >
-                  <span className={`group flex h-26 w-26 flex-col items-center justify-center rounded-full border text-center transition ${isActive ? "scale-110 border-indigo-400/40 bg-indigo-400/12 text-white shadow-[0_0_40px_rgba(99,102,241,0.22)]" : "border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/18 hover:bg-white/[0.05]"}`}>
+                  <span className={`group flex h-26 w-26 flex-col items-center justify-center rounded-full border text-center transition duration-300 ${isActive ? "scale-110 border-amber-400/50 bg-amber-400/12 text-white shadow-[0_0_40px_rgba(245,158,11,0.25)]" : "border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/18 hover:bg-white/[0.05]"}`}>
                     <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-slate-500">{group.short}</span>
                     <span className="mt-2 px-3 font-display text-xl leading-none">{group.category}</span>
                   </span>
                 </button>
               );
             })}
-            <svg className="absolute inset-0 h-full w-full" viewBox="0 0 600 600" fill="none">
-              {skillGroups.map((_, index) => {
+            {/* SVG connecting lines — pointer-events-none so clicks pass through to buttons */}
+            <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 600 600" fill="none">
+              {skillGroups.map((group, index) => {
                 const angle = (Math.PI * 2 * index) / skillGroups.length - Math.PI / 2;
                 const radius = 220;
                 const x = 300 + Math.cos(angle) * radius;
                 const y = 300 + Math.sin(angle) * radius;
-                return <line key={index} x1="300" y1="300" x2={x} y2={y} stroke="rgba(148,163,184,0.2)" strokeWidth="1" />;
+                const isActive = active === group.category;
+                return (
+                  <line
+                    key={index}
+                    x1="300" y1="300" x2={x} y2={y}
+                    stroke={isActive ? "rgba(245,158,11,0.55)" : "rgba(148,163,184,0.15)"}
+                    strokeWidth={isActive ? "1.5" : "1"}
+                    style={{ transition: "stroke 0.3s, stroke-width 0.3s" }}
+                  />
+                );
               })}
             </svg>
           </div>
 
+          {/* Detail panel */}
           <ControlPanel className="overflow-hidden">
             <div className="border-b border-white/8 px-7 py-5 font-mono text-[11px] uppercase tracking-[0.26em] text-slate-500">
-              Active category · {activeGroup.category}
+              Active category · <span className="text-amber-300/80">{activeGroup.category}</span>
             </div>
-            <div className="p-7">
-              <h3 className="font-display text-4xl text-white">{activeGroup.category}</h3>
-              <div className="mt-6 flex flex-wrap gap-3">
-                {activeGroup.skills.map((skill) => (
-                  <span key={skill} className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-slate-200">
-                    {skill}
-                  </span>
-                ))}
-              </div>
+            <div className="relative min-h-[18rem] p-7">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeGroup.category}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                >
+                  <h3 className="font-display text-4xl text-white">{activeGroup.category}</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">{activeGroup.description}</p>
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {activeGroup.skills.map((skill) => (
+                      <span
+                        key={skill.name}
+                        className={`rounded-full border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] transition-colors ${
+                          skill.primary
+                            ? "border-amber-400/25 bg-amber-400/8 text-amber-200"
+                            : "border-white/10 bg-white/[0.04] text-slate-400"
+                        }`}
+                      >
+                        {skill.name}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-5 flex items-center gap-4 text-[10px] uppercase tracking-[0.22em] text-slate-600">
+                    <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full border border-amber-400/25 bg-amber-400/8" /> Primary</span>
+                    <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full border border-white/10 bg-white/[0.04]" /> Secondary</span>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </ControlPanel>
         </div>
 
-        <div className="space-y-4 lg:hidden">
-          {skillGroups.map((group) => (
-            <ControlPanel key={group.category} className="overflow-hidden">
-              <details>
-                <summary className="cursor-pointer list-none px-5 py-5">
+        {/* Mobile accordion — controlled with framer-motion */}
+        <div className="space-y-3 lg:hidden">
+          {skillGroups.map((group) => {
+            const isOpen = openMobileCategories.has(group.category);
+            return (
+              <ControlPanel key={group.category} className="overflow-hidden">
+                <button
+                  className="w-full px-5 py-5 text-left"
+                  onClick={() => toggleMobileCategory(group.category)}
+                >
                   <div className="flex items-center justify-between gap-4">
                     <div>
                       <div className="font-display text-2xl text-white">{group.category}</div>
-                      <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.22em] text-slate-500">Tap to expand</div>
+                      <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.22em] text-slate-500">{group.short}</div>
                     </div>
-                    <div className="rounded-full border border-white/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-400">{group.short}</div>
+                    <ChevronDown className={`size-5 shrink-0 text-slate-500 transition-all duration-300 ${isOpen ? "rotate-180 text-amber-300" : ""}`} />
                   </div>
-                </summary>
-                <div className="flex flex-wrap gap-2 px-5 pb-5">
-                  {group.skills.map((skill) => (
-                    <span key={skill} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-slate-300">
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </details>
-            </ControlPanel>
-          ))}
+                </button>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.28, ease: "easeInOut" }}
+                      className="overflow-hidden"
+                    >
+                      <p className="px-5 pb-3 text-sm leading-6 text-slate-500">{group.description}</p>
+                      <div className="flex flex-wrap gap-2 px-5 pb-5">
+                        {group.skills.map((skill) => (
+                          <span
+                            key={skill.name}
+                            className={`rounded-full border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] ${
+                              skill.primary
+                                ? "border-amber-400/25 bg-amber-400/8 text-amber-200"
+                                : "border-white/10 bg-white/[0.04] text-slate-400"
+                            }`}
+                          >
+                            {skill.name}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </ControlPanel>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -1076,6 +1190,10 @@ function ContactSection() {
 }
 
 export default function Home() {
+  useEffect(() => {
+    document.title = siteMeta.title;
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#0a0a0f] text-white">
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.08),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(245,158,11,0.07),transparent_18%)]" />
@@ -1085,6 +1203,22 @@ export default function Home() {
         <AboutSection />
         <WorkSection />
         <ExperienceSection />
+        <div className="relative py-10">
+          <div className="container">
+            <div className="flex items-center gap-5 text-[11px] uppercase tracking-[0.34em] text-slate-600">
+              <span className="h-px flex-1 bg-white/6" />
+              <span>The stack behind the work</span>
+              <span className="h-px flex-1 bg-white/6" />
+            </div>
+            <div className="mt-5 flex flex-wrap justify-center gap-2">
+              {["MongoDB", "Node.js", "React", "TypeScript", "PWA", "IndexedDB", "Playwright"].map((tag) => (
+                <span key={tag} className="rounded-full border border-amber-400/20 bg-amber-400/[0.05] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-amber-300/80">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
         <SkillsSection />
         <ContactSection />
       </main>
