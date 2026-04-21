@@ -1,0 +1,11 @@
+<svg viewBox="0 0 400 400" width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+  <title>The Agile Labs</title>
+  <g transform="translate(200, 200)">
+    <path d="M-38 -80 L-62 -80 L-62 80 L-38 80"
+      fill="none" stroke="white" stroke-width="14"
+      stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M38 -80 L62 -80 L62 80 L38 80"
+      fill="none" stroke="white" stroke-width="14"
+      stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

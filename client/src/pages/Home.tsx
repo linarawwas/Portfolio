@@ -999,14 +999,21 @@ function WorkSection() {
             <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,10,15,0.9),rgba(10,10,15,0.78)_42%,rgba(10,10,15,0.92)_100%)]" />
             <div className="relative grid gap-8 p-8 md:p-10 lg:grid-cols-[1.4fr_0.8fr] lg:items-end">
               <div>
-                <div className="mb-5 flex flex-wrap gap-2">
+                <div className="mb-5 flex flex-wrap items-center gap-2">
                   {featured.badges?.map((badge) => (
                     <Badge key={badge} className="rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-amber-200 hover:bg-amber-400/10">
                       {badge}
                     </Badge>
                   ))}
+                  <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-slate-400">
+                    <img src="/logos/agile-labs.svg" alt="" aria-hidden="true" className="size-3.5 opacity-70" />
+                    The Agile Labs
+                  </span>
                 </div>
-                <h3 className="font-display text-[clamp(2.3rem,6vw,4.4rem)] leading-[0.92] text-white">{featured.name}</h3>
+                <div className="mb-4 flex items-center gap-4">
+                  <img src="/logos/trx.png" alt="TRX" className="size-12 rounded-xl object-contain" />
+                  <h3 className="font-display text-[clamp(2.3rem,6vw,4.4rem)] leading-[0.92] text-white">{featured.name}</h3>
+                </div>
                 <p className="mt-4 max-w-xl text-lg leading-8 text-slate-300">{featured.description}</p>
                 <div className="mt-8 flex flex-wrap gap-3">
                   {featured.metrics?.map((metric) => (
@@ -1116,8 +1123,12 @@ function DesktopTimeline() {
                 }`}
               >
                 <div className="mb-8 flex items-start justify-between gap-4">
-                  <div className={`flex size-14 items-center justify-center rounded-2xl border font-mono text-base font-semibold tracking-[0.18em] ${item.accent === "blue" ? "border-indigo-400/30 bg-indigo-400/12 text-indigo-200" : item.accent === "green" ? "border-emerald-400/30 bg-emerald-400/12 text-emerald-200" : "border-amber-400/30 bg-amber-400/12 text-amber-200"}`}>
-                    {String(index + 1).padStart(2, "0")}
+                  <div className={`flex size-14 items-center justify-center rounded-2xl border overflow-hidden font-mono text-base font-semibold tracking-[0.18em] ${item.accent === "blue" ? "border-indigo-400/30 bg-indigo-400/12 text-indigo-200" : item.accent === "green" ? "border-emerald-400/30 bg-emerald-400/12 text-emerald-200" : "border-amber-400/30 bg-amber-400/12 text-amber-200"}`}>
+                    {index === 0 ? (
+                      <img src="/logos/agile-labs.svg" alt="The Agile Labs" className="size-9 object-contain opacity-90" />
+                    ) : (
+                      String(index + 1).padStart(2, "0")
+                    )}
                   </div>
                   <div className="flex flex-col items-end gap-2">
                     <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-amber-300">{item.dates}</div>
@@ -1185,7 +1196,10 @@ function MobileTimeline() {
                   <div>
                     <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-amber-300">{item.dates}</div>
                     <h3 className="mt-2 font-display text-2xl text-white">{item.role}</h3>
-                    <p className="mt-1.5 text-sm uppercase tracking-[0.18em] text-slate-500">{item.company} · {item.location}</p>
+                    <p className="mt-1.5 flex items-center gap-1.5 text-sm uppercase tracking-[0.18em] text-slate-500">
+                      {index === 0 && <img src="/logos/agile-labs.svg" alt="" aria-hidden="true" className="size-4 opacity-60" />}
+                      {item.company} · {item.location}
+                    </p>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {index === 0 ? (
                         <>

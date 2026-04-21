@@ -216,8 +216,12 @@ export default function TrxPage() {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,15,0.88),rgba(10,10,15,0.7)_38%,rgba(10,10,15,0.95)_100%)]" />
           <div className="container relative py-20 md:py-28">
             <div className="mx-auto max-w-5xl text-center">
-              <div className="mx-auto flex size-28 items-center justify-center rounded-[2rem] border border-amber-400/30 bg-amber-400/8 font-display text-5xl text-amber-200 shadow-[0_0_50px_rgba(245,158,11,0.15)] md:size-32 md:text-6xl">
-                TRX
+              <div className="mx-auto flex size-28 items-center justify-center rounded-[2rem] border border-amber-400/30 bg-amber-400/8 shadow-[0_0_50px_rgba(245,158,11,0.15)] md:size-32 overflow-hidden">
+                <img src="/logos/trx.png" alt="TRX" className="size-full object-cover" />
+              </div>
+              <div className="mx-auto mt-4 flex items-center justify-center gap-2 font-mono text-[10px] uppercase tracking-[0.26em] text-slate-500">
+                <img src="/logos/agile-labs.svg" alt="" aria-hidden="true" className="size-4 opacity-50" />
+                By The Agile Labs
               </div>
               <h1 className="mt-8 font-display text-[clamp(3rem,9vw,6rem)] leading-[0.9] text-white">Route accounting for Lebanese water distributors.</h1>
               <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-300">
