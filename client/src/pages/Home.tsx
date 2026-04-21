@@ -13,6 +13,7 @@ import {
   useInView,
   useReducedMotion,
   useScroll,
+  useSpring,
   useTransform,
 } from "framer-motion";
 import {
@@ -49,6 +50,204 @@ const statItems = [
 ];
 
 const sectionIds = ["hero", "about", "work", "experience", "skills", "contact"];
+
+const wordReveal = {
+  hidden: { opacity: 0, y: 22 },
+  visible: (delay: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
+const bootLines = [
+  { left: "CONNECTING TO NODE...", right: "OK" },
+  { left: "AUTH: LINA_RAWAS", right: "VERIFIED" },
+  { left: "LOADING INTERFACE...", right: "READY" },
+];
+
+function ScrollProgressBar() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
+
+  return (
+    <motion.div
+      style={{ scaleX }}
+      className="fixed left-0 top-0 z-50 h-[1.5px] w-full origin-left bg-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.7)]"
+    />
+  );
+}
+
+function HudBrackets({ color = "rgba(245,158,11,0.35)" }: { color?: string }) {
+  const style = { borderColor: color };
+  return (
+    <>
+      <span aria-hidden="true" className="pointer-events-none absolute left-3 top-3 h-4 w-4 border-l-[1.5px] border-t-[1.5px]" style={style} />
+      <span aria-hidden="true" className="pointer-events-none absolute right-3 top-3 h-4 w-4 border-r-[1.5px] border-t-[1.5px]" style={style} />
+      <span aria-hidden="true" className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 border-b-[1.5px] border-l-[1.5px]" style={style} />
+      <span aria-hidden="true" className="pointer-events-none absolute bottom-3 right-3 h-4 w-4 border-b-[1.5px] border-r-[1.5px]" style={style} />
+    </>
+  );
+}
+
+function StatusChip({ status }: { status: "active" | "completed" | "production" }) {
+  if (status === "active") {
+    return (
+      <span className="inline-flex items-center gap-1.5 rounded border border-emerald-400/25 bg-emerald-400/8 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.28em] text-emerald-300">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+        active
+      </span>
+    );
+  }
+  if (status === "production") {
+    return (
+      <span className="inline-flex items-center gap-1.5 rounded border border-amber-400/25 bg-amber-400/8 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.28em] text-amber-300">
+        production
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded border border-white/10 bg-white/[0.03] px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.28em] text-slate-500">
+      completed
+    </span>
+  );
+}
+
+function BootSequence({ onDone }: { onDone: () => void }) {
+  const [lines, setLines] = useState(0);
+  const [fading, setFading] = useState(false);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (reduceMotion) {
+      onDone();
+      return;
+    }
+
+    const already = sessionStorage.getItem("boot_done");
+    if (already) {
+      onDone();
+      return;
+    }
+
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    bootLines.forEach((_, i) => {
+      timers.push(setTimeout(() => setLines(i + 1), 300 + i * 380));
+    });
+
+    timers.push(setTimeout(() => setFading(true), 300 + bootLines.length * 380 + 300));
+    timers.push(
+      setTimeout(() => {
+        sessionStorage.setItem("boot_done", "1");
+        onDone();
+      }, 300 + bootLines.length * 380 + 800),
+    );
+
+    return () => timers.forEach(clearTimeout);
+  }, [onDone, reduceMotion]);
+
+  return (
+    <motion.div
+      animate={{ opacity: fading ? 0 : 1 }}
+      transition={{ duration: 0.5 }}
+      className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-[#0a0a0f]"
+    >
+      <div className="w-full max-w-sm space-y-3 px-8 font-mono text-[11px] uppercase tracking-[0.28em]">
+        {bootLines.slice(0, lines).map((line, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex items-center justify-between gap-4"
+          >
+            <span className="text-slate-400">
+              <span className="mr-2 text-amber-400/60">›</span>
+              {line.left}
+            </span>
+            <span className="text-emerald-400/80">[{line.right}]</span>
+          </motion.div>
+        ))}
+        {lines > 0 && lines < bootLines.length + 1 ? (
+          <div className="flex items-center gap-1 text-amber-400/50">
+            <span>›</span>
+            <span className="inline-block h-3 w-1.5 animate-pulse bg-amber-400/60" />
+          </div>
+        ) : null}
+      </div>
+    </motion.div>
+  );
+}
+
+function MagneticButton({ children, className = "" }: { children: ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useSpring(0, { stiffness: 200, damping: 20 });
+  const y = useSpring(0, { stiffness: 200, damping: 20 });
+  const reduceMotion = useReducedMotion();
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    setEnabled(!window.matchMedia("(hover: none)").matches);
+  }, []);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (reduceMotion || !enabled || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    x.set((e.clientX - cx) * 0.28);
+    y.set((e.clientY - cy) * 0.28);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  if (!enabled || reduceMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
+  return (
+    <div ref={ref} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} className={className}>
+      <motion.div style={{ x, y }}>{children}</motion.div>
+    </div>
+  );
+}
+
+function TiltCard({ children, className = "" }: { children: ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const rotateX = useSpring(0, { stiffness: 150, damping: 18 });
+  const rotateY = useSpring(0, { stiffness: 150, damping: 18 });
+  const reduceMotion = useReducedMotion();
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (reduceMotion || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    rotateY.set(((e.clientX - cx) / (rect.width / 2)) * 4);
+    rotateX.set(-((e.clientY - cy) / (rect.height / 2)) * 4);
+  };
+
+  const handleMouseLeave = () => {
+    rotateX.set(0);
+    rotateY.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, transformPerspective: 1200 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 function useSectionTracking() {
   const [active, setActive] = useState("work");
@@ -193,8 +392,9 @@ function ControlPanel({
 }) {
   return (
     <div
-      className={`rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-sm ${className}`}
+      className={`relative rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-sm ${className}`}
     >
+      <HudBrackets color="rgba(245,158,11,0.3)" />
       {children}
     </div>
   );
@@ -440,6 +640,7 @@ function Navigation() {
           scrolled ? "border-b border-white/10 bg-[#0a0a0f]/82 backdrop-blur-xl" : "bg-transparent"
         }`}
       >
+        <ScrollProgressBar />
         <div className="container flex h-20 items-center justify-between gap-6">
           <a href="#hero" className="font-display text-2xl tracking-[0.18em] text-white">
             LR
@@ -516,17 +717,41 @@ function HeroSection() {
               </motion.div>
               <motion.div custom={0.3} variants={entry}>
                 <h1 className="font-display text-[clamp(2.2rem,9vw,7rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.05em] text-white">
-                  <span className="block">Full Stack</span>
-                  <span className="flex items-end gap-3 text-white">
-                    <span>Engineer</span>
-                    <motion.span
-                      initial={{ width: 0 }}
-                      animate={{ width: reduceMotion ? 66 : 84 }}
-                      transition={{ delay: 0.45, duration: 0.7 }}
-                      className="mb-4 hidden h-1 shrink-0 rounded-full bg-amber-400 shadow-[0_0_24px_rgba(245,158,11,0.4)] sm:block"
-                    />
-                  </span>
-                  <span className="block pl-[8vw] md:pl-[12vw]">& Founder</span>
+                  {reduceMotion ? (
+                    <>
+                      <span className="block">Full Stack</span>
+                      <span className="flex items-end gap-3 text-white">
+                        <span>Engineer</span>
+                        <motion.span
+                          initial={{ width: 0 }}
+                          animate={{ width: 66 }}
+                          transition={{ delay: 0.45, duration: 0.7 }}
+                          className="mb-4 hidden h-1 shrink-0 rounded-full bg-amber-400 shadow-[0_0_24px_rgba(245,158,11,0.4)] sm:block"
+                        />
+                      </span>
+                      <span className="block pl-[8vw] md:pl-[12vw]">& Founder</span>
+                    </>
+                  ) : (
+                    <>
+                      <motion.span initial="hidden" animate="visible" custom={0.1} variants={wordReveal} className="block">
+                        Full Stack
+                      </motion.span>
+                      <span className="flex items-end gap-3 text-white">
+                        <motion.span initial="hidden" animate="visible" custom={0.22} variants={wordReveal}>
+                          Engineer
+                        </motion.span>
+                        <motion.span
+                          initial={{ width: 0 }}
+                          animate={{ width: 84 }}
+                          transition={{ delay: 0.45, duration: 0.7 }}
+                          className="mb-4 hidden h-1 shrink-0 rounded-full bg-amber-400 shadow-[0_0_24px_rgba(245,158,11,0.4)] sm:block"
+                        />
+                      </span>
+                      <motion.span initial="hidden" animate="visible" custom={0.36} variants={wordReveal} className="block pl-[8vw] md:pl-[12vw]">
+                        & Founder
+                      </motion.span>
+                    </>
+                  )}
                 </h1>
               </motion.div>
 
@@ -550,12 +775,14 @@ function HeroSection() {
               </motion.p>
 
               <motion.div custom={0.88} variants={entry} className="mt-9 flex flex-col gap-4 sm:flex-row">
-                <Button asChild className="group h-14 rounded-full bg-amber-400 px-7 text-[12px] uppercase tracking-[0.24em] text-slate-950 hover:bg-amber-300">
-                  <a href="#work">
-                    See my work
-                    <MoveDown className="ml-2 size-4 transition-transform duration-300 group-hover:translate-y-0.5" />
-                  </a>
-                </Button>
+                <MagneticButton>
+                  <Button asChild className="group h-14 rounded-full bg-amber-400 px-7 text-[12px] uppercase tracking-[0.24em] text-slate-950 hover:bg-amber-300">
+                    <a href="#work">
+                      See my work
+                      <MoveDown className="ml-2 size-4 transition-transform duration-300 group-hover:translate-y-0.5" />
+                    </a>
+                  </Button>
+                </MagneticButton>
                 <Button asChild variant="outline" className="h-14 rounded-full border-white/14 bg-transparent px-7 text-[12px] uppercase tracking-[0.24em] text-white hover:bg-white/6">
                   <a href="#experience">View CV</a>
                 </Button>
@@ -569,11 +796,18 @@ function HeroSection() {
             transition={{ delay: 1.05, duration: 0.75 }}
             className="hidden lg:block lg:self-end lg:justify-self-end"
           >
-            <ControlPanel className="w-full max-w-[28rem] overflow-hidden rounded-[1.6rem] border-amber-400/15 bg-slate-950/55">
-              <div className="border-b border-white/8 px-5 py-4 font-mono text-[11px] uppercase tracking-[0.24em] text-slate-400">
+            <ControlPanel className="w-full max-w-[28rem] overflow-hidden rounded-[1.6rem] border-amber-400/15 bg-slate-950/55 shadow-[inset_0_0_40px_rgba(245,158,11,0.04),0_24px_80px_rgba(0,0,0,0.35)]">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 z-10 rounded-[1.75rem]"
+                style={{
+                  backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px)",
+                }}
+              />
+              <div className="relative z-20 border-b border-white/8 px-5 py-4 font-mono text-[11px] uppercase tracking-[0.24em] text-slate-400">
                 Operational proof
               </div>
-              <div className="space-y-4 px-5 py-5">
+              <div className="relative z-20 space-y-4 px-5 py-5">
                 <div className="rounded-2xl border border-amber-400/20 bg-amber-400/6 p-4 text-sm leading-6 text-slate-200 shadow-[0_0_30px_rgba(245,158,11,0.07)]">
                   <span className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-amber-300">Live metric</span>
                   <div className="text-2xl font-semibold text-white">
@@ -605,6 +839,11 @@ function AboutSection() {
 
   return (
     <section id="about" className="relative py-28 md:py-36">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
+        style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(99,102,241,0.065), transparent)" }}
+      />
       <div className="container space-y-16">
         <SectionHeading
           eyebrow="Positioning"
@@ -741,6 +980,11 @@ function WorkSection() {
 
   return (
     <section id="work" className="relative py-28 md:py-36">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
+        style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(245,158,11,0.055), transparent)" }}
+      />
       <div className="container space-y-12">
         <SectionHeading
           eyebrow="Selected work"
@@ -749,7 +993,8 @@ function WorkSection() {
         />
 
         {featured ? (
-          <ControlPanel className="group relative overflow-hidden border-amber-400/15">
+          <TiltCard className="group relative overflow-hidden">
+            <ControlPanel className="relative overflow-hidden border-amber-400/15">
             <div className="absolute inset-0 opacity-35 transition duration-500 group-hover:opacity-55" style={{ backgroundImage: `url(${featured.backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }} />
             <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,10,15,0.9),rgba(10,10,15,0.78)_42%,rgba(10,10,15,0.92)_100%)]" />
             <div className="relative grid gap-8 p-8 md:p-10 lg:grid-cols-[1.4fr_0.8fr] lg:items-end">
@@ -781,7 +1026,7 @@ function WorkSection() {
               <div className="flex flex-col gap-3 lg:items-end lg:text-right">
                 {featured.actions.map((action, index) => {
                   const isExternal = "external" in action && action.external;
-                  return (
+                  const button = (
                     <Button
                       key={action.label}
                       asChild
@@ -794,13 +1039,16 @@ function WorkSection() {
                       </a>
                     </Button>
                   );
+
+                  return index === 0 ? <MagneticButton key={action.label}>{button}</MagneticButton> : button;
                 })}
               </div>
             </div>
-          </ControlPanel>
+            </ControlPanel>
+          </TiltCard>
         ) : null}
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-[1fr_0.9fr_1.1fr]">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3 xl:grid-rows-[auto_auto]">
           {otherProjects.map((project, index) => {
             return (
             <motion.article
@@ -810,11 +1058,13 @@ function WorkSection() {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ delay: index * 0.05, duration: 0.55 }}
               className={`rounded-[1.7rem] border border-white/10 bg-[#12131a] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.26)] transition duration-500 hover:-translate-y-1 hover:border-white/18 hover:bg-[#171923] ${
-                index === 1 ? "xl:translate-y-8" : ""
-              }`}
+                index === 0 ? "xl:col-span-2" : ""
+              } ${index === 3 ? "xl:row-span-2" : ""}`}
             >
-              <div className="mb-6 min-h-[10.5rem] rounded-[1.35rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015))] p-5">
-                <ProjectVisual type={project.visual} />
+              <div className={`mb-6 rounded-[1.35rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015))] p-5 ${index === 0 ? "min-h-[16rem]" : "min-h-[10.5rem]"}`}>
+                <div className={`h-full ${index === 0 ? "flex items-center justify-center" : ""}`}>
+                  <ProjectVisual type={project.visual} />
+                </div>
               </div>
               <h3 className="font-display text-3xl leading-none text-white">{project.name}</h3>
               <p className="mt-3 text-sm leading-7 text-slate-400">{project.description}</p>
@@ -865,11 +1115,25 @@ function DesktopTimeline() {
                     : "border-white/10 bg-white/[0.03]"
                 }`}
               >
-                <div className="mb-8 flex items-center justify-between">
+                <div className="mb-8 flex items-start justify-between gap-4">
                   <div className={`flex size-14 items-center justify-center rounded-2xl border font-mono text-base font-semibold tracking-[0.18em] ${item.accent === "blue" ? "border-indigo-400/30 bg-indigo-400/12 text-indigo-200" : item.accent === "green" ? "border-emerald-400/30 bg-emerald-400/12 text-emerald-200" : "border-amber-400/30 bg-amber-400/12 text-amber-200"}`}>
                     {String(index + 1).padStart(2, "0")}
                   </div>
-                  <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-amber-300">{item.dates}</div>
+                  <div className="flex flex-col items-end gap-2">
+                    <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-amber-300">{item.dates}</div>
+                    <div className="flex flex-wrap justify-end gap-2">
+                      {index === 0 ? (
+                        <>
+                          <StatusChip status="active" />
+                          <StatusChip status="production" />
+                        </>
+                      ) : index === 3 ? (
+                        <StatusChip status="active" />
+                      ) : (
+                        <StatusChip status="completed" />
+                      )}
+                    </div>
+                  </div>
                 </div>
                 {index === 0 && (
                   <div className="mb-5 flex flex-wrap gap-2">
@@ -918,13 +1182,26 @@ function MobileTimeline() {
             <div className={`absolute left-4 top-5 h-[calc(100%-2.5rem)] w-0.5 rounded-full transition-colors duration-300 ${open ? "bg-amber-400/70" : "bg-amber-400/25"}`} />
             <button className="w-full text-left" onClick={() => setOpenIndex(open ? null : index)}>
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-amber-300">{item.dates}</div>
-                  <h3 className="mt-2 font-display text-2xl text-white">{item.role}</h3>
-                  <p className="mt-1.5 text-sm uppercase tracking-[0.18em] text-slate-500">{item.company} · {item.location}</p>
+                  <div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-amber-300">{item.dates}</div>
+                    <h3 className="mt-2 font-display text-2xl text-white">{item.role}</h3>
+                    <p className="mt-1.5 text-sm uppercase tracking-[0.18em] text-slate-500">{item.company} · {item.location}</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {index === 0 ? (
+                        <>
+                          <StatusChip status="active" />
+                          <StatusChip status="production" />
+                        </>
+                      ) : index === 3 ? (
+                        <StatusChip status="active" />
+                      ) : (
+                        <StatusChip status="completed" />
+                      )}
+                    </div>
+                  </div>
+                  <ChevronDown className={`mt-1 size-5 shrink-0 text-slate-500 transition-all duration-300 ${open ? "rotate-180 text-amber-300" : ""}`} />
                 </div>
-                <ChevronDown className={`mt-1 size-5 shrink-0 text-slate-500 transition-all duration-300 ${open ? "rotate-180 text-amber-300" : ""}`} />
-              </div>
+
             </button>
             <AnimatePresence>
               {open ? (
@@ -950,6 +1227,11 @@ function MobileTimeline() {
 function ExperienceSection() {
   return (
     <section id="experience" className="relative py-28 md:py-36">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
+        style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(245,158,11,0.05), transparent)" }}
+      />
       <div className="container space-y-12">
         <SectionHeading
           eyebrow="Experience"
@@ -984,6 +1266,11 @@ function SkillsSection() {
 
   return (
     <section id="skills" className="relative py-28 md:py-36">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
+        style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(99,102,241,0.055), transparent)" }}
+      />
       <div className="container space-y-12">
         <SectionHeading
           eyebrow="Skills"
@@ -1142,6 +1429,11 @@ function SkillsSection() {
 function ContactSection() {
   return (
     <section id="contact" className="relative py-28 md:py-36">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
+        style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(16,185,129,0.055), transparent)" }}
+      />
       <div className="container">
         <ControlPanel className="overflow-hidden border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))]">
           <div className="grid gap-10 p-8 md:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
@@ -1179,12 +1471,18 @@ function ContactSection() {
 }
 
 export default function Home() {
+  const [booted, setBooted] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return Boolean(sessionStorage.getItem("boot_done"));
+  });
+
   useEffect(() => {
     document.title = siteMeta.title;
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#0a0a0f] text-white">
+    <div className={`relative min-h-screen bg-[#0a0a0f] text-white ${booted ? "overflow-x-hidden" : "overflow-hidden"}`}>
+      {!booted ? <BootSequence onDone={() => setBooted(true)} /> : null}
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.08),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(245,158,11,0.07),transparent_18%)]" />
       <Navigation />
       <main id="main-content" className="relative z-10">

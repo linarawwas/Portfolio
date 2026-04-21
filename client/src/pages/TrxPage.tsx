@@ -7,7 +7,7 @@ Preserve the same dark editorial system language while making the content more t
 
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +27,30 @@ const navItems = [
   { label: "Results", href: "#results" },
   { label: "Stack", href: "#stack" },
 ] as const;
+
+function ScrollProgressBar() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
+
+  return (
+    <motion.div
+      style={{ scaleX }}
+      className="fixed left-0 top-0 z-50 h-[1.5px] w-full origin-left bg-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.7)]"
+    />
+  );
+}
+
+function HudBrackets({ color = "rgba(245,158,11,0.25)" }: { color?: string }) {
+  const style = { borderColor: color };
+  return (
+    <>
+      <span aria-hidden="true" className="pointer-events-none absolute left-3 top-3 h-4 w-4 border-l-[1.5px] border-t-[1.5px]" style={style} />
+      <span aria-hidden="true" className="pointer-events-none absolute right-3 top-3 h-4 w-4 border-r-[1.5px] border-t-[1.5px]" style={style} />
+      <span aria-hidden="true" className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 border-b-[1.5px] border-l-[1.5px]" style={style} />
+      <span aria-hidden="true" className="pointer-events-none absolute bottom-3 right-3 h-4 w-4 border-b-[1.5px] border-r-[1.5px]" style={style} />
+    </>
+  );
+}
 
 function Counter({
   value,
@@ -77,7 +101,8 @@ function PageShell({ children }: { children: ReactNode }) {
 
 function Panel({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`rounded-[1.7rem] border border-white/10 bg-white/[0.03] shadow-[0_24px_70px_rgba(0,0,0,0.3)] ${className}`}>
+    <div className={`relative rounded-[1.7rem] border border-white/10 bg-white/[0.03] shadow-[0_24px_70px_rgba(0,0,0,0.3)] ${className}`}>
+      <HudBrackets color="rgba(245,158,11,0.25)" />
       {children}
     </div>
   );
@@ -107,6 +132,7 @@ function StickyNav() {
 
   return (
     <div className="sticky top-0 z-40 border-b border-white/10 bg-[#0a0a0f]/82 backdrop-blur-xl">
+      <ScrollProgressBar />
       <div className="container flex flex-wrap items-center gap-3 py-4">
         <a href="/" className="mr-3 inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-slate-300 transition hover:border-white/20 hover:text-white">
           <ArrowLeft className="size-4" />
@@ -197,6 +223,14 @@ export default function TrxPage() {
               <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-300">
                 A production system designed inside a real water company, where offline routes, currency volatility, and financial correctness all had to work together.
               </p>
+              <div className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-[10px] uppercase tracking-[0.28em] text-slate-500">
+                {["Sole engineer", "Production system", "Lebanon", "2023–present", "~10 min read"].map((item, i) => (
+                  <span key={item} className="flex items-center gap-4">
+                    {item}
+                    {i < 4 ? <span className="h-px w-4 bg-white/15" /> : null}
+                  </span>
+                ))}
+              </div>
               <Panel className="mt-10 px-6 py-6 md:px-8">
                 <div className="grid gap-5 md:grid-cols-4">
                   {[
@@ -277,18 +311,56 @@ export default function TrxPage() {
         <section id="decisions" className="py-24 md:py-28">
           <div className="container space-y-10">
             <div className="max-w-3xl space-y-4">
-              <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-amber-300">Engineering decisions</div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-amber-300">
+                <span className="mr-2 text-amber-400/50">›_</span>Engineering decisions
+              </div>
               <h2 className="font-display text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.92] text-white">The differentiator was decision quality.</h2>
               <p className="text-base leading-8 text-slate-400">TRX was shaped by constraints that could not be abstracted away. Each decision below exists because a simpler version would have been wrong in production.</p>
             </div>
-            <div className="grid gap-5 lg:grid-cols-2">
-              {trxDecisions.map((item) => (
-                <Panel key={item.problem} className="border-l-[3px] border-l-amber-400 p-7 md:p-8">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-slate-500">The problem</div>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">{item.problem}</p>
-                  <div className="mt-6 font-mono text-[10px] uppercase tracking-[0.24em] text-amber-300">The decision</div>
-                  <p className="mt-3 text-sm leading-7 text-slate-200">{item.decision}</p>
-                </Panel>
+            <div className="space-y-3">
+              {trxDecisions.map((item, index) => (
+                <motion.div
+                  key={item.problem}
+                  initial={{ opacity: 0, x: -12 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.45, delay: index * 0.07 }}
+                  className="relative overflow-hidden rounded-[1.4rem] border border-white/8 bg-[#0d0e15] p-6 md:p-7"
+                >
+                  <HudBrackets color="rgba(245,158,11,0.2)" />
+                  <div className="mb-5 flex items-center gap-3 border-b border-white/6 pb-4">
+                    <div className="flex gap-1.5">
+                      <span className="h-2.5 w-2.5 rounded-full bg-red-500/60" />
+                      <span className="h-2.5 w-2.5 rounded-full bg-amber-400/60" />
+                      <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/60" />
+                    </div>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-slate-600">
+                      decision_{String(index + 1).padStart(2, "0")}.log
+                    </span>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="mt-0.5 shrink-0 font-mono text-[11px] text-amber-400/70">›</span>
+                    <div>
+                      <span className="mb-2 inline-block rounded border border-red-400/25 bg-red-400/8 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.3em] text-red-300">
+                        problem
+                      </span>
+                      <p className="text-sm leading-7 text-slate-400">{item.problem}</p>
+                    </div>
+                  </div>
+                  <div className="mt-5 flex gap-3">
+                    <span className="mt-0.5 shrink-0 font-mono text-[11px] text-emerald-400/70">›</span>
+                    <div>
+                      <span className="mb-2 inline-block rounded border border-emerald-400/25 bg-emerald-400/8 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.3em] text-emerald-300">
+                        decision
+                      </span>
+                      <p className="text-sm leading-7 text-slate-200">{item.decision}</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex items-center gap-1 font-mono text-[11px] text-amber-400/50">
+                    <span>›</span>
+                    <span className="inline-block h-3 w-1.5 animate-pulse bg-amber-400/60" />
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>
