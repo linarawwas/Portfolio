@@ -144,7 +144,7 @@ export const experiences = [
     symbol: "IS",
     accent: "blue",
     bullets: [
-"One of only 2 candidates (out of 90+ applicants) to successfully complete all stages of a competitive three-month engineering program."      "Built an AI-powered career assessment platform with admin portal and chatbot integration.",
+"One of only 2 candidates (out of 90+ applicants) to successfully complete all stages of a competitive three-month engineering program." ,     "Built an AI-powered career assessment platform with admin portal and chatbot integration.",
       "Scraped and structured 100k+ legal documents into a searchable full-text database.",
     ],
   },
