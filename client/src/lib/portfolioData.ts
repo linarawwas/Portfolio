@@ -80,8 +80,8 @@ export const projects = [
     description: "Automotive marketplace platform delivered inside an Agile team shipping cycle.",
     tags: ["Full stack", "Marketplace", "UI systems"],
     visual: "car-silhouette",
-    frontendRepoUrl: "https://github.com/HasanKanj/E-commerce-Front-end",
-    backendRepoUrl: "https://github.com/HasanKanj/E-commerce-Backend",
+    frontendRepoUrl: "https://github.com/linarawwas/E-commerce-Frontend-RoadCarLb",
+    backendRepoUrl: "https://github.com/linarawwas/ecommerce-car-reservation-Backend",
     liveUrl: "",
   },
   {
@@ -100,8 +100,8 @@ export const projects = [
     description: "Learning management interface designed around progress visibility and task clarity.",
     tags: ["Education", "Dashboards", "Progress states"],
     visual: "learning-bars",
-    frontendRepoUrl: "https://github.com/omarkh7/LMS-frontend",
-    backendRepoUrl: "https://github.com/omarkh7/LMS-backend",
+    frontendRepoUrl: "https://github.com/linarawwas/LMS-Frontend-Codi",
+    backendRepoUrl: "https://github.com/linarawwas/LMS-backend-Codi",
     liveUrl: "",
   },
   {

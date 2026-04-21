@@ -569,7 +569,7 @@ function HeroSection() {
             transition={{ delay: 1.05, duration: 0.75 }}
             className="hidden lg:block lg:self-end lg:justify-self-end"
           >
-            <ControlPanel className="w-full max-w-sm overflow-hidden rounded-[1.6rem] border-amber-400/15 bg-slate-950/55">
+            <ControlPanel className="w-full max-w-[28rem] overflow-hidden rounded-[1.6rem] border-amber-400/15 bg-slate-950/55">
               <div className="border-b border-white/8 px-5 py-4 font-mono text-[11px] uppercase tracking-[0.24em] text-slate-400">
                 Operational proof
               </div>
@@ -581,13 +581,13 @@ function HeroSection() {
                   </div>
                   <p className="mt-1 text-slate-400">transactions processed / month</p>
                 </div>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-3 gap-2">
                   {statItems.map((stat) => (
-                    <div key={stat.label} className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-                      <div className="font-display text-2xl text-white">
+                    <div key={stat.label} className="min-w-0 overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-2.5">
+                      <div className="font-display text-xl text-white">
                         <NumberTicker value={stat.value} suffix={stat.suffix} />
                       </div>
-                      <div className="mt-1 text-[11px] uppercase tracking-[0.18em] text-slate-500">{stat.label}</div>
+                      <div className="mt-1 break-words text-[10px] leading-tight uppercase tracking-[0.14em] text-slate-500">{stat.label}</div>
                     </div>
                   ))}
                 </div>
