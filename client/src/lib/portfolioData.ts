@@ -60,6 +60,8 @@ export const projects = [
     ],
     backgroundImage:
       "https://d2xsxph8kpxj0f.cloudfront.net/310519663583051886/TULUjKNVxbCZTvdkwLcvn5/trx-feature-background-Yu8JxgbeHwazWs7tZSCe5b.webp",
+    frontendRepoUrl: "",
+    backendRepoUrl: "",
   },
   {
     key: "istay",
@@ -67,7 +69,8 @@ export const projects = [
     description: "AI-assisted assessment and admin workflow for a competitive engineering program.",
     tags: ["React", "Node.js", "AI", "Admin"],
     visual: "ai-flow",
-    repoUrl: "",
+    frontendRepoUrl: "",
+    backendRepoUrl: "",
     liveUrl: "",
     collaboratorNote: "Private repository",
   },
@@ -77,7 +80,8 @@ export const projects = [
     description: "Automotive marketplace platform delivered inside an Agile team shipping cycle.",
     tags: ["Full stack", "Marketplace", "UI systems"],
     visual: "car-silhouette",
-    repoUrl: "",
+    frontendRepoUrl: "https://github.com/HasanKanj/E-commerce-Front-end",
+    backendRepoUrl: "https://github.com/HasanKanj/E-commerce-Backend",
     liveUrl: "",
   },
   {
@@ -86,7 +90,8 @@ export const projects = [
     description: "Portfolio management interface with structured content surfaces and modular cards.",
     tags: ["CMS", "Responsive UI", "Content"],
     visual: "masonry-cms",
-    repoUrl: "",
+    frontendRepoUrl: "https://github.com/AhmadALAhmad1/frontend-portfolio-project",
+    backendRepoUrl: "https://github.com/AhmadALAhmad1/backend-portfolio-project",
     liveUrl: "",
   },
   {
@@ -95,7 +100,8 @@ export const projects = [
     description: "Learning management interface designed around progress visibility and task clarity.",
     tags: ["Education", "Dashboards", "Progress states"],
     visual: "learning-bars",
-    repoUrl: "",
+    frontendRepoUrl: "https://github.com/omarkh7/LMS-frontend",
+    backendRepoUrl: "https://github.com/omarkh7/LMS-backend",
     liveUrl: "",
   },
   {
@@ -104,7 +110,8 @@ export const projects = [
     description: "Reading interface concept for browsing structured literary content and collections.",
     tags: ["Reader", "Books", "Interface concept"],
     visual: "book-spines",
-    repoUrl: "",
+    frontendRepoUrl: "",
+    backendRepoUrl: "https://github.com/linarawwas/Fahrenheit-Backend",
     liveUrl: "",
   },
 ] as const;

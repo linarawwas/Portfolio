@@ -686,24 +686,37 @@ function AboutSection() {
 }
 
 function ProjectAction({ project }: { project: (typeof supportingProjects)[number] }) {
-  const repoUrl = project.repoUrl;
+  const frontendRepoUrl = project.frontendRepoUrl;
+  const backendRepoUrl = project.backendRepoUrl;
   const liveUrl = project.liveUrl;
+  const hasAnyRepo = Boolean(frontendRepoUrl || backendRepoUrl);
 
   return (
     <div className="mt-6 flex flex-wrap items-center gap-3">
-      {repoUrl ? (
+      {frontendRepoUrl ? (
         <Button asChild variant="outline" className="rounded-full border-white/10 bg-transparent text-xs uppercase tracking-[0.2em] text-white hover:bg-white/6">
-          <a href={repoUrl} target="_blank" rel="noreferrer">
+          <a href={frontendRepoUrl} target="_blank" rel="noreferrer">
             <Github className="mr-2 size-4" />
-            View repo
+            Frontend repo
           </a>
         </Button>
-      ) : (
+      ) : null}
+
+      {backendRepoUrl ? (
+        <Button asChild variant="outline" className="rounded-full border-white/10 bg-transparent text-xs uppercase tracking-[0.2em] text-white hover:bg-white/6">
+          <a href={backendRepoUrl} target="_blank" rel="noreferrer">
+            <Github className="mr-2 size-4" />
+            Backend repo
+          </a>
+        </Button>
+      ) : null}
+
+      {!hasAnyRepo ? (
         <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-400">
           <Lock className="size-3.5" />
           Private
         </div>
-      )}
+      ) : null}
 
       {liveUrl ? (
         <Button asChild className="rounded-full bg-amber-400 text-xs uppercase tracking-[0.2em] text-slate-950 hover:bg-amber-300">
@@ -725,28 +738,6 @@ function ProjectAction({ project }: { project: (typeof supportingProjects)[numbe
 function WorkSection() {
   const featured = featuredProject;
   const otherProjects = supportingProjects;
-  const projectLinkMap = {
-    istay: {
-      repoUrl: import.meta.env.VITE_ISTAY_REPO || "",
-      liveUrl: import.meta.env.VITE_ISTAY_LIVE_URL || "",
-    },
-    carslb: {
-      repoUrl: import.meta.env.VITE_CARSLB_REPO || "",
-      liveUrl: import.meta.env.VITE_CARSLB_LIVE_URL || "",
-    },
-    "alumni-cms": {
-      repoUrl: import.meta.env.VITE_PORTFOLIO_CMS_REPO || "",
-      liveUrl: import.meta.env.VITE_PORTFOLIO_CMS_LIVE_URL || "",
-    },
-    lms: {
-      repoUrl: import.meta.env.VITE_LMS_REPO || "",
-      liveUrl: import.meta.env.VITE_LMS_LIVE_URL || "",
-    },
-    gutenberg: {
-      repoUrl: import.meta.env.VITE_GUTENBERG_FRONTEND_REPO || "",
-      liveUrl: import.meta.env.VITE_GUTENBERG_LIVE_URL || "",
-    },
-  } as const;
 
   return (
     <section id="work" className="relative py-28 md:py-36">
@@ -811,9 +802,6 @@ function WorkSection() {
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-[1fr_0.9fr_1.1fr]">
           {otherProjects.map((project, index) => {
-            const projectLinks = projectLinkMap[project.key];
-            const resolvedProject = { ...project, ...projectLinks };
-
             return (
             <motion.article
               key={project.key}
@@ -837,7 +825,8 @@ function WorkSection() {
                   </span>
                 ))}
               </div>
-              <ProjectAction project={resolvedProject} />
+                <ProjectAction project={project} />
+
             </motion.article>
             );
           })}
