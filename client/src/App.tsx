@@ -2,7 +2,7 @@
 Design reminder — Constructivist Control Room:
 App-level routing should stay minimal and purposeful.
 The default theme must support the dark editorial system used across the portfolio.
-Routes should clearly separate the single-page portfolio from the TRX case study.
+Routes should clearly separate the single-page portfolio from the AquaOps case study.
 */
 
 import { Toaster } from "@/components/ui/sonner";
@@ -52,7 +52,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/trx" component={TrxPage} />
+      <Route path="/aquaops" component={TrxPage} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

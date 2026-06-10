@@ -47,16 +47,16 @@ export const aboutLayers = [
 
 export const projects = [
   {
-    key: "trx",
-    name: "TRX",
+    key: "aquaops",
+    name: "AquaOps",
     description: "Route accounting for Lebanese water distributors.",
     type: "featured",
     badges: ["Production", "SaaS"],
     metrics: ["3k+ txn/mo", "40% less reconciliation", "Sole engineer", "In active use"],
     stack: ["MongoDB", "Node.js", "React", "PWA", "Playwright", "TypeScript", "IndexedDB", "Express"],
     actions: [
-      { label: "Case study", href: "/trx", kind: "primary" },
-      { label: "trx.theagilelabs.com", href: "https://trx.theagilelabs.com", kind: "ghost", external: true },
+      { label: "Case study", href: "/aquaops", kind: "primary" },
+      { label: "aquaops.app", href: "https://aquaops.app", kind: "ghost", external: true },
     ],
     backgroundImage:
       "https://d2xsxph8kpxj0f.cloudfront.net/310519663583051886/TULUjKNVxbCZTvdkwLcvn5/trx-feature-background-Yu8JxgbeHwazWs7tZSCe5b.webp",
@@ -131,7 +131,7 @@ export const experiences = [
     symbol: "LR",
     accent: "amber",
     bullets: [
-      "Identified a gap in Lebanese water distribution and built TRX — a production SaaS processing 3k+ monthly transactions with a paying client.",
+      "Identified a gap in Lebanese water distribution and built AquaOps — a production SaaS processing 3k+ monthly transactions with a paying client.",
       "Designed for offline-first field use, dual-currency financial accuracy, and end-to-end test coverage.",
       "Founded The Agile Labs as an agency delivering operational systems to utility distributors in Lebanon.",
     ],
@@ -180,7 +180,7 @@ export const skillGroups = [
   {
     category: "Languages",
     short: "Lang",
-    description: "Core languages across every project. TypeScript throughout TRX; Python for data processing and scripting.",
+    description: "Core languages across every project. TypeScript throughout AquaOps; Python for data processing and scripting.",
     skills: [
       { name: "JavaScript ES6+", primary: true },
       { name: "TypeScript", primary: true },
@@ -191,7 +191,7 @@ export const skillGroups = [
   {
     category: "Frontend",
     short: "FE",
-    description: "Built TRX's full frontend in React + TypeScript — PWA shell, IndexedDB offline storage, and animated UI.",
+    description: "Built AquaOps's full frontend in React + TypeScript — PWA shell, IndexedDB offline storage, and animated UI.",
     skills: [
       { name: "React", primary: true },
       { name: "TypeScript", primary: true },
@@ -205,7 +205,7 @@ export const skillGroups = [
   {
     category: "Backend",
     short: "BE",
-    description: "Designed and built TRX's API layer, sync architecture, and all five of my production backends.",
+    description: "Designed and built AquaOps's API layer, sync architecture, and all five of my production backends.",
     skills: [
       { name: "Node.js", primary: true },
       { name: "Express.js", primary: true },
@@ -217,7 +217,7 @@ export const skillGroups = [
   {
     category: "Databases",
     short: "DB",
-    description: "MongoDB powers TRX with aggregation pipelines for real-time financial totals. MySQL used at Codi-Tech.",
+    description: "MongoDB powers AquaOps with aggregation pipelines for real-time financial totals. MySQL used at Codi-Tech.",
     skills: [
       { name: "MongoDB", primary: true },
       { name: "MySQL", primary: false },
@@ -226,7 +226,7 @@ export const skillGroups = [
   {
     category: "Testing",
     short: "QA",
-    description: "Playwright covers TRX's full financial and sync flows end-to-end. Jest for isolated business logic.",
+    description: "Playwright covers AquaOps's full financial and sync flows end-to-end. Jest for isolated business logic.",
     skills: [
       { name: "Playwright", primary: true },
       { name: "Jest", primary: false },
@@ -248,7 +248,7 @@ export const skillGroups = [
   {
     category: "Concepts",
     short: "Ops",
-    description: "Offline-first architecture is the core of TRX. Agile delivery across Codi-Tech and I-Stay.",
+    description: "Offline-first architecture is the core of AquaOps. Agile delivery across Codi-Tech and I-Stay.",
     skills: [
       { name: "Offline-first", primary: true },
       { name: "Agile", primary: true },
@@ -258,7 +258,7 @@ export const skillGroups = [
   },
 ] as const;
 
-export const trxPainPoints = [
+export const aquaopsPainPoints = [
   {
     title: "Manual reconciliation overhead",
     description: "Teams were losing hours every day comparing paper records against spreadsheets.",
@@ -291,7 +291,7 @@ export const trxPainPoints = [
   },
 ] as const;
 
-export const trxDecisions = [
+export const aquaopsDecisions = [
   {
     problem: "Lebanon's USD/LBP rate changes constantly, so recalculating historical totals from a live rate makes past invoices wrong retroactively.",
     decision: "Snapshot the exchange rate into each transaction at write time so historical records remain immutable regardless of later rate movement.",
@@ -314,14 +314,14 @@ export const trxDecisions = [
   },
 ] as const;
 
-export const trxResults = [
+export const aquaopsResults = [
   { value: 3, suffix: "hrs", label: "saved per day" },
   { value: 1200, prefix: "$", label: "saved per month in salaries" },
   { value: 0, suffix: "", label: "missed deliveries" },
   { value: 3000, suffix: "+", label: "transactions per month" },
 ] as const;
 
-export const trxStackLayers = [
+export const aquaopsStackLayers = [
   {
     title: "Testing",
     items: ["Playwright (E2E)", "Jest (unit)"],
@@ -355,6 +355,6 @@ export const contactLinks = {
 export const siteMeta = {
   title: "Lina Rawas — Full Stack Engineer & Founder",
   description:
-    "Full stack engineer and founder of The Agile Labs. Built TRX, a production SaaS for Lebanese water distributors. Product thinking. Engineering depth. Shipped.",
+    "Full stack engineer and founder of The Agile Labs. Built AquaOps, a production SaaS for Lebanese water distributors. Product thinking. Engineering depth. Shipped.",
   domain: "portfolio.theagilelabs.com",
 };

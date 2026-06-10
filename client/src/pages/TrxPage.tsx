@@ -1,6 +1,6 @@
 /*
 Design reminder — Constructivist Control Room:
-The TRX page should read like an engineer-authored case study, not a landing page.
+The AquaOps page should read like an engineer-authored case study, not a landing page.
 Emphasize operational constraints, irreversible decisions, and evidence of correctness.
 Preserve the same dark editorial system language while making the content more technical and proof-heavy.
 */
@@ -11,10 +11,10 @@ import { motion, useInView, useReducedMotion, useScroll, useSpring } from "frame
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  trxDecisions,
-  trxPainPoints,
-  trxResults,
-  trxStackLayers,
+  aquaopsDecisions,
+  aquaopsPainPoints,
+  aquaopsResults,
+  aquaopsStackLayers,
 } from "@/lib/portfolioData";
 
 const caseStudyImage =
@@ -201,7 +201,7 @@ function ArchitectureDiagram() {
 export default function TrxPage() {
   useEffect(() => {
     const prev = document.title;
-    document.title = "TRX Case Study — Lina Rawas";
+    document.title = "AquaOps Case Study — Lina Rawas";
     return () => { document.title = prev; };
   }, []);
 
@@ -217,7 +217,7 @@ export default function TrxPage() {
           <div className="container relative py-20 md:py-28">
             <div className="mx-auto max-w-5xl text-center">
               <div className="mx-auto flex size-28 items-center justify-center rounded-[2rem] border border-amber-400/30 bg-amber-400/8 shadow-[0_0_50px_rgba(245,158,11,0.15)] md:size-32 overflow-hidden">
-                <img src="/logos/trx.png" alt="TRX" className="size-full object-cover" />
+                <img src="/logos/aquaops.svg" alt="AquaOps" className="size-full object-cover" />
               </div>
               <div className="mx-auto mt-4 flex items-center justify-center gap-2 font-mono text-[10px] uppercase tracking-[0.26em] text-slate-500">
                 <img src="/logos/agile-labs.svg" alt="" aria-hidden="true" className="size-4 opacity-50" />
@@ -251,8 +251,8 @@ export default function TrxPage() {
               </Panel>
               <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
                 <Button asChild variant="outline" className="h-14 rounded-full border-white/12 bg-transparent px-7 text-xs uppercase tracking-[0.24em] text-white hover:bg-white/8">
-                  <a href="https://trx.theagilelabs.com" target="_blank" rel="noreferrer">
-                    trx.theagilelabs.com
+                  <a href="https://aquaops.app" target="_blank" rel="noreferrer">
+                    aquaops.app
                     <ExternalLink className="ml-2 size-4" />
                   </a>
                 </Button>
@@ -270,7 +270,7 @@ export default function TrxPage() {
                   Lebanese water distributors run their entire operation on notebooks and Excel. Every day means comparing paper records against spreadsheets, trying to remember who paid in USD and who paid in LBP, and resolving confusing deliveries after the route is already over.
                 </p>
                 <p>
-                  TRX digitizes the full workflow — from loading the truck in the morning to seeing the day&apos;s exact result at night. It was built inside a real Lebanese water company, after watching the actual workflow before a line of code was written.
+                  AquaOps digitizes the full workflow — from loading the truck in the morning to seeing the day&apos;s exact result at night. It was built inside a real Lebanese water company, after watching the actual workflow before a line of code was written.
                 </p>
               </div>
             </Panel>
@@ -286,7 +286,7 @@ export default function TrxPage() {
               <p className="text-base leading-8 text-slate-400">These were the frictions visible in the field before architecture decisions were made.</p>
             </div>
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {trxPainPoints.map((item, index) => (
+              {aquaopsPainPoints.map((item, index) => (
                 <motion.article
                   key={item.title}
                   initial={{ opacity: 0, y: 20 }}
@@ -319,10 +319,10 @@ export default function TrxPage() {
                 <span className="mr-2 text-amber-400/50">›_</span>Engineering decisions
               </div>
               <h2 className="font-display text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.92] text-white">The differentiator was decision quality.</h2>
-              <p className="text-base leading-8 text-slate-400">TRX was shaped by constraints that could not be abstracted away. Each decision below exists because a simpler version would have been wrong in production.</p>
+              <p className="text-base leading-8 text-slate-400">AquaOps was shaped by constraints that could not be abstracted away. Each decision below exists because a simpler version would have been wrong in production.</p>
             </div>
             <div className="space-y-3">
-              {trxDecisions.map((item, index) => (
+              {aquaopsDecisions.map((item, index) => (
                 <motion.div
                   key={item.problem}
                   initial={{ opacity: 0, x: -12 }}
@@ -378,7 +378,7 @@ export default function TrxPage() {
             </div>
             <Panel className="p-8 md:p-10">
               <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-                {trxResults.map((item) => {
+                {aquaopsResults.map((item) => {
                   const prefix = "prefix" in item ? item.prefix : "";
                   const suffix = "suffix" in item ? item.suffix : "";
                   return (
@@ -392,8 +392,8 @@ export default function TrxPage() {
                 })}
               </div>
               <blockquote className="mt-10 rounded-[1.35rem] border border-amber-400/18 bg-amber-400/[0.05] p-6 text-base leading-8 text-slate-200 md:p-8">
-                “Before TRX, we spent time every day comparing paper and Excel numbers. We had at least one problem delivery per week. With TRX, we saved hours, removed the extra support roles, and stopped losing money quietly.”
-                <footer className="mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-amber-300">Water company owner, Lebanon · Early TRX partner</footer>
+                “Before AquaOps, we spent time every day comparing paper and Excel numbers. We had at least one problem delivery per week. With AquaOps, we saved hours, removed the extra support roles, and stopped losing money quietly.”
+                <footer className=”mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-amber-300”>Water company owner, Lebanon · Early AquaOps partner</footer>
               </blockquote>
             </Panel>
           </div>
@@ -406,7 +406,7 @@ export default function TrxPage() {
               <h2 className="font-display text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.92] text-white">Layered for reliability.</h2>
             </div>
             <div className="space-y-3">
-              {trxStackLayers.map((layer, index) => (
+              {aquaopsStackLayers.map((layer, index) => (
                 <Panel key={layer.title} className={`p-6 md:p-7 ${index % 2 === 0 ? "border-amber-400/14" : "border-indigo-400/14"}`}>
                   <div className="grid gap-4 md:grid-cols-[12rem_1fr] md:items-start">
                     <div className="font-display text-3xl text-white">{layer.title}</div>
@@ -433,8 +433,8 @@ export default function TrxPage() {
               </a>
             </Button>
             <Button asChild className="h-14 rounded-full bg-amber-400 px-7 text-xs uppercase tracking-[0.24em] text-slate-950 hover:bg-amber-300">
-              <a href="https://trx.theagilelabs.com" target="_blank" rel="noreferrer">
-                Visit TRX
+              <a href="https://aquaops.app" target="_blank" rel="noreferrer">
+                Visit AquaOps
                 <ExternalLink className="ml-2 size-4" />
               </a>
             </Button>

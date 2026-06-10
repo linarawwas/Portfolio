@@ -771,7 +771,7 @@ function HeroSection() {
               </motion.div>
 
               <motion.p custom={0.72} variants={entry} className="mt-3 max-w-xl text-sm leading-7 text-slate-400 md:text-base">
-                Founder of The Agile Labs. Built TRX — a production SaaS processing 3k+ monthly transactions in active use across Lebanon.
+                Founder of The Agile Labs. Built AquaOps — a production SaaS processing 3k+ monthly transactions in active use across Lebanon.
               </motion.p>
 
               <motion.div custom={0.88} variants={entry} className="mt-9 flex flex-col gap-4 sm:flex-row">
@@ -858,7 +858,7 @@ function AboutSection() {
                 I&apos;m a full stack engineer who builds from the ground up — from identifying the problem to shipping the thing that solves it.
               </p>
               <p className="text-base leading-8 text-slate-400">
-                I founded The Agile Labs to bring modern software to an underserved market: Lebanese utility distributors still running operations on notebooks and Excel. TRX is the first product — a production SaaS that replaced those workflows for a bottled water distributor, and it&apos;s been running in the field ever since.
+                I founded The Agile Labs to bring modern software to an underserved market: Lebanese utility distributors still running operations on notebooks and Excel. AquaOps is the first product — a production SaaS that replaced those workflows for a bottled water distributor, and it&apos;s been running in the field ever since.
               </p>
               <p className="text-base leading-8 text-slate-400">
                 Before that: Agile teams at Codi-Tech, an AI platform at I-Stay, and teaching 200+ kids to code through CodeBrave with UNICEF and Al Ghurair Foundation.
@@ -989,7 +989,7 @@ function WorkSection() {
         <SectionHeading
           eyebrow="Selected work"
           title="Evidence over claims."
-          description="The portfolio is built around a single dominant proof point — TRX — and supported by product and delivery work shipped inside teams."
+          description="The portfolio is built around a single dominant proof point — AquaOps — and supported by product and delivery work shipped inside teams."
         />
 
         {featured ? (
@@ -1011,7 +1011,7 @@ function WorkSection() {
                   </span>
                 </div>
                 <div className="mb-4 flex items-center gap-4">
-                  <img src="/logos/trx.png" alt="TRX" className="size-12 rounded-xl object-contain" />
+                  <img src="/logos/aquaops.svg" alt="AquaOps" className="size-12 rounded-xl object-contain" />
                   <h3 className="font-display text-[clamp(2.3rem,6vw,4.4rem)] leading-[0.92] text-white">{featured.name}</h3>
                 </div>
                 <p className="mt-4 max-w-xl text-lg leading-8 text-slate-300">{featured.description}</p>
