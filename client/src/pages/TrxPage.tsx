@@ -392,8 +392,8 @@ export default function TrxPage() {
                 })}
               </div>
               <blockquote className="mt-10 rounded-[1.35rem] border border-amber-400/18 bg-amber-400/[0.05] p-6 text-base leading-8 text-slate-200 md:p-8">
-                “Before AquaOps, we spent time every day comparing paper and Excel numbers. We had at least one problem delivery per week. With AquaOps, we saved hours, removed the extra support roles, and stopped losing money quietly.”
-                <footer className=”mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-amber-300”>Water company owner, Lebanon · Early AquaOps partner</footer>
+                &ldquo;Before AquaOps, we spent time every day comparing paper and Excel numbers. We had at least one problem delivery per week. With AquaOps, we saved hours, removed the extra support roles, and stopped losing money quietly.&rdquo;
+                <footer className="mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-amber-300">Water company owner, Lebanon · Early AquaOps partner</footer>
               </blockquote>
             </Panel>
           </div>
